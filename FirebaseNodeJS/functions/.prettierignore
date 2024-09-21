@@ -1,0 +1,24 @@
+# Ignore artifacts:
+coverage
+.husky
+# Ignore all HTML files:
+*.html
+out
+node_modules/**
+lib
+dist
+build
+*.spec.ts
+*e2e-spec.ts
+*.spec.ts
+*e2e-spec.ts
+*.spec.tsx
+*.lock
+.yarn
+.yarnrc
+*.js
+.env
+.env.*
+*.yaml
+*.json
+*.log

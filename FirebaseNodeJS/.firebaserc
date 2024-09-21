@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "kog-kos-konc-dev",
+    "local": "kog-kos-konc-dev",
+    "dev": "kog-kos-konc-dev",
+    "staging": "kog-kos-konc-test",
+    "prod": "kog-kos-konc"
+  }
+}

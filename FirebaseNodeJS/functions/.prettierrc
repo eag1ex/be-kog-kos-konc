@@ -1,0 +1,14 @@
+{
+  "printWidth": 180,
+  "tabWidth": 2,
+  "trailingComma": "none",
+  "endOfLine": "auto",
+  "overrides": [
+    {
+      "files": "*.ts",
+      "options": {
+        "parser": "typescript"
+      }
+    }
+  ]
+}

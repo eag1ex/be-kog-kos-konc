@@ -1,0 +1,127 @@
+diff a/FirebaseNodeJS/functions/src/services/exercise.service.ts b/FirebaseNodeJS/functions/src/services/exercise.service.ts	(rejected hunks)
+@@ -88,53 +88,103 @@
+             name: exercise?.name,
+             note: exercise?.note,
+             picture: exercise?.picture,
+-            category:exercise?.category
+-          }
++            category: exercise?.category
++        }
+         return exerciseDataViewModel;
+     }
+ 
++    async queryExerciseData(ref: any, filter: ExerciseFilter,) {
++        const keyword: string = filter.keyword.toLowerCase();
++        //let result: any;
++
++        const q1 = ref.where("name", "==", keyword).get();
++        const q2 = ref.where("id", "==", filter.keyword).get();
++        const q3 = ref.where("category", "==", keyword).get();
++
++        const [querySnapshot1, querySnapshot2, querySnapshot3] = await Promise.all([q1, q2, q3]);
++
++        if (filter.lastID) {
++            const snap = db.collection(Collection.EXERCISES)
++                .where('id', '==', filter.lastID);
++
++            const q1 = await snap.where("name", "==", keyword.toLowerCase()).get();
++            const q2 = await snap.where("id", "==", keyword).get();
++            const q3 = await snap.where("category", "==", keyword.toLowerCase()).get();
++
++            let querySnap1: any = [];
++            let querySnap2: any = [];
++            let querySnap3: any = [];
++
++            if (q1.docs) {
++                querySnap1 = await ref.startAfter(snap).get();
++            }
++            if (q2.docs) {
++                querySnap2 = await ref.startAfter(snap).get();
++            }
++            if (q3.docs) {
++                querySnap3 = await ref.startAfter(snap).get();
++            }
++
++            //const [querySnapshot1, querySnapshot2, querySnapshot3] = await Promise.all([q1, q2, q3]);
++
++            const result1 = querySnap1.docs;
++            const result2 = querySnap2.docs;
++            const result3 = querySnap3.docs;
++
++            let resultFilter = result1.concat(result2);
++            return resultFilter.concat(result3);
++        }
++
++        const usersArray1 = querySnapshot1.docs;
++        const usersArray2 = querySnapshot2.docs;
++        const usersArray3 = querySnapshot3.docs;
++
++        let resultFilter = usersArray1.concat(usersArray2);
++        return resultFilter.concat(usersArray3);
++    }
++
+     async createExerciseData(exerciseDetail: ExerciseDataModel) {
+         const exerciseRef = db.collection(this.exerciseCollection).doc();
+         const exerciseSizeQuery = await db.collection(this.exerciseCollection).orderBy('id', 'asc').get();
+         const exerciseQueryData = exerciseSizeQuery.docs.pop()?.data()
+-        exerciseDetail.id = exerciseQueryData? exerciseQueryData?.id + 1: 1;
+-        exerciseDetail.uid = exerciseRef.id;      
++        exerciseDetail.id = exerciseQueryData ? exerciseQueryData?.id + 1 : 1;
++        exerciseDetail.uid = exerciseRef.id;
+         exerciseDetail.created_date = new Date();
+         exerciseDetail.updated_date = new Date();
+         await exerciseRef.set(exerciseDetail, { merge: true });
+-        return exerciseDetail;  
++        return exerciseDetail;
+     }
+ 
+     async updateExerciseData(exerciseDetail: ExerciseDataModel) {
+-        const exerciseRef = db.collection(this.exerciseCollection).doc(exerciseDetail.uid); 
++        const exerciseRef = db.collection(this.exerciseCollection).doc(exerciseDetail.uid);
+         let obj;
+         obj = {
+-                name: exerciseDetail.name,
+-                category: exerciseDetail.category,
+-                note: exerciseDetail.note,
+-                updated_date:  new Date()
++            name: exerciseDetail.name,
++            category: exerciseDetail.category,
++            note: exerciseDetail.note,
++            updated_date: new Date()
+         }
+ 
+-        if(exerciseDetail.picture.url !== '' && exerciseDetail.picture.url !== undefined && exerciseDetail.picture.url !== null){
+-           obj  ={
+-               ...obj,
+-               picture: exerciseDetail.picture
+-           }  
++        if (exerciseDetail.picture.url !== '' && exerciseDetail.picture.url !== undefined && exerciseDetail.picture.url !== null) {
++            obj = {
++                ...obj,
++                picture: exerciseDetail.picture
++            }
+         }
+-        else{
+-            obj  ={
++        else {
++            obj = {
+                 ...obj,
+                 picture: {}
+-            } 
+-        }        
++            }
++        }
+         await exerciseRef.set(obj, { merge: true });
+-        return obj;  
++        return obj;
+     }
+ 
+     async deleteExerciseData(uid: string) {
+-        const foodRef = db.collection(this.exerciseCollection).doc(uid); 
++        const foodRef = db.collection(this.exerciseCollection).doc(uid);
+         await foodRef.delete();
+-        return true;  
++        return true;
+     }
+ 
+     async validateHasExerciseDataByName(name: string) {

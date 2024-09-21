@@ -1,0 +1,12 @@
+steps:
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args:
+  - gcloud
+  - functions
+  - deploy
+  - api
+  - --gen1
+  - --region=us-central1
+  - --source=.
+  - --trigger-http
+  - --runtime=nodejs12

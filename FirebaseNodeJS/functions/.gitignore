@@ -1,0 +1,28 @@
+## Compiled JavaScript files
+
+**/*.js.map
+
+# Typescript v1 declaration files
+typings/
+
+node_modules/
+dist
+dist/*
+lib/
+lib/*
+_temp
+_local
+firebase-export-*
+## Firebase likes to load this file and ignore all other so we only need it locally
+.env.local
+
+## cache location
+functions/.cache
+
+# ignore
+src/__raw_tests__/example.js
+
+## ignore yarn
+.yarn/*
+!/.yarn/releases/*
+!/.yarn/releases/yarn-3.0.0.cjs

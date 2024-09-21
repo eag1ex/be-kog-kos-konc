@@ -1,0 +1,55 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npx --no-install commitlint --edit "$1"
+npx jira-prepare-commit-msg $1;
+
+BACKEND_DIR=FirebaseNodeJS/functions
+
+## in pipeline the path is different, and yarn will not solve the problem with --cwd
+npm --prefix $BACKEND_DIR run husky:prefix
+
+
+
+# Check Prettier standards
+## NOTE husky:lint already has pretty added so lets not double up on this :)
+# yarn  husky:pretty:check ||
+# (
+#     echo '🤢🤮🤢🤮 Its NOT GOOD - Your styling needs improvement. 🤢🤮🤢🤮
+#             Prettier Check Failed. Run yarn format, add changes and try commit again.';
+
+#     exit 1;
+# )
+
+
+# Check tsconfig standards
+npm --prefix $BACKEND_DIR run husky:lint  ||
+(
+    echo '🤡😂❌🤡 Failed Type check. 🤡😂❌🤡
+            Are you seriously trying to write that? Make the changes required above.';
+    exit 1;        
+
+)
+
+
+echo '🤔🤔🤔🤔... Alright... Code looks good to me... Now try to build Firebase functions. 🤔🤔🤔🤔';
+
+
+# optionally we can build before each commit to check it has no issues
+# but sometimes it may become a blocker
+npm --prefix $BACKEND_DIR run husky:build ||
+(
+    echo '❌👷🔨❌ Better call Bob... Because your build failed ❌👷🔨❌
+            build failed: View the errors above to see why. 
+            -- Firebase functions BUILD HAS FAILED!
+    ';
+    exit 1;    
+)
+
+
+
+# If everything passes... Now we can commit
+echo '✅✅✅✅ You win this time... I am committing this now. ✅✅✅✅';
+
+## if all good just stage lint updates
+git add -A .

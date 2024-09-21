@@ -1,0 +1,10 @@
+diff a/FirebaseNodeJS/functions/src/api/components/exercises/web-exercise.route.ts b/FirebaseNodeJS/functions/src/api/components/exercises/web-exercise.route.ts	(rejected hunks)
+@@ -4,7 +4,7 @@
+ 
+ export class webExerciseRoute {
+     public routes(app: express.Application): void  {      
+-        app.get(`/exercise`, [authMiddleware.isBackendUser, exerciseController.getExerciseDataList]);
++        app.post(`/exercise/filter`, [authMiddleware.isBackendUser, exerciseController.getExerciseDataList]);
+         app.get(`/exercise/all`, [authMiddleware.isBackendUser, exerciseController.getAllExerciseData]);
+         app.get(`/exercise/:uid`, exerciseController.validator('getById'), [authMiddleware.isBackendUser, exerciseController.getExerciseDataById]);
+         app.post(`/exercise`, exerciseController.validator('create'), [authMiddleware.isBackendUser, exerciseController.createExerciseData]);

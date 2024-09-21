@@ -1,0 +1,52 @@
+## vscode
+FirebaseNodeJS/functions/.vscode
+
+FirebaseNodeJS/functions/package-lock.json
+FirebaseNodeJS/functions/.vs/
+FirebaseNodeJS/functions/src/triggers/member.triggers.ts.rej
+/node_modules
+/FirebaseNodeJS/db_dump_local
+
+# ignore all source, and client sensitive files, for demo purpouses
+*.js
+*.ts
+*.json
+*.env*
+*.env
+*.pdf
+*.scss
+*.html
+
+
+
+
+## we dont need package at this root, will confuse the project root package.json
+#/package.json << we need it now to allow conventional commits
+
+#/yarn.lock
+/examples.js
+/_temp
+
+/example_tests.js
+/_examples
+/example*.js
+## ignore tihs file!
+/firebase.tokens.sh
+/deploy.firebase.tokens.sh
+/FirebaseNodeJS/functions/yarn-error.log
+/FirebaseNodeJS/functions/ui-debug.log
+/FirebaseNodeJS/functions/firestore-debug.log
+yarn-error.log
+FirebaseNodeJS/functions/.fuse_hidden*
+/package-lock.json
+
+## cache location
+FirebaseNodeJS/functions/.cache
+
+## ignore yarn
+.yarnrc
+/.yarn/*
+!/.yarn/releases/*
+!/.yarn/releases/yarn-*.cjs
+.pnp.cjs
+#./yarn.lock
